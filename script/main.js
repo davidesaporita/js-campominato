@@ -19,7 +19,7 @@ var level = chooseLevel();
 var x = possibilities(level);
 var mines = 16;
 var computerNumbers = playGenerator(mines, x);
-play(computerNumbers);
+play(computerNumbers, x);
 
 function chooseLevel() {
     var level;
@@ -66,7 +66,7 @@ function playGenerator(mines, x) {
     return array;
 }
 
-function play(computerNumbers) {
+function play(computerNumbers, x) {
     var userPoints = 0;
     var userNumbers = [];
     var defeat = false;
