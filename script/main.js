@@ -15,59 +15,80 @@
  * 
  */
 
-var computerNums = [];
-var userNums = [];
-var difficultyIndex;
-var x = 100;
-var tempNum;
+var level = chooseLevel();
+var x = possibilities(level);
+var mines = 16;
+var computerNumbers = playGenerator(mines, x);
+play(computerNumbers);
 
-while(isNaN(difficultyIndex) || (difficultyIndex < 0 && difficultyIndex > 3)) {
-    difficultyIndex = parseInt(prompt('Scegli il livello di difficoltà:\n 0 (Facile)\n 1 (Medio)\n 2 (Difficile)'));
+function chooseLevel() {
+    var level;
+    while(isNaN(level) || (level < 0 && level > 3)) {
+        level = parseInt(prompt('Scegli il livello di difficoltà:\n 0 (Facile)\n 1 (Medio)\n 2 (Difficile)'));
+    }
+    return level;
 }
 
-switch ( difficultyIndex ) {
-    case 0: 
-        x = 100; 
-        break;
-    case 1: 
-        x = 80; 
-        break;
-    case 2: 
-        x = 50; 
-        break;
-    default: 
-        x = false;
+function possibilities(level) {
+    var x = 0;
+    switch ( level ) {
+        case 1: 
+            x = 80; 
+            break;
+        case 2: 
+            x = 50; 
+            break;
+        default: 
+            x = 100;
+    }
+    return x;
 }
 
-for ( i = 0 ; i < 16; i++ ) {
-    do {
-        tempNum = Math.ceil( Math.random() * x );
-    } while( computerNums.includes(tempNum) === true );
-
-    computerNums[i] = tempNum;
+function getRandomInt(min, max) {
+    var temp = 0;
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    temp = Math.floor(Math.random() * (max - min + 1)) + min;
+    console.log(temp);
+    return temp;
 }
 
-console.table(computerNums);
+function playGenerator(mines, x) {
+    var array = [];
+    var tempNum = 0;
+    for ( i = 0 ; i < mines; i++ ) {
+        while( tempNum <= 0 || array.includes(tempNum) === true ) {
+            tempNum = getRandomInt(1, x);
+        }
+        array.push(tempNum);
+    }
+    console.table(array);
+    return array;
+}
 
-var userPoints = 0;
-var defeat = false;
+function play(computerNumbers) {
+    var userPoints = 0;
+    var userNumbers = [];
+    var defeat = false;
+    var inputNum = 0;
 
-while( defeat === false && userPoints < 16 ) {
-    do {   
-        inputNum = parseInt(prompt('Tentativo n°' + (userPoints+1) + '\nInserisci un numero tra 1 e ' + x + ', vediamo se becchi la mina...' ));
-    } while ( isNaN(inputNum) || inputNum < 1 || inputNum > x );
+    while( defeat === false && userPoints < mines ) {
+        while ((userNumbers.includes(inputNum) === true) || (isNaN(inputNum) || inputNum < 1 || inputNum > x)) {   
+            inputNum = parseInt(prompt('Tentativo n°' + (userPoints+1) + '\nInserisci un numero tra 1 e ' + x + ', vediamo se becchi la mina...' ));
+        } 
+        userNumbers[userPoints] = inputNum;
+        
+        if ( computerNumbers.includes(userNumbers[userPoints]) === true ) {
+            defeat = true;
+        } else {
+            userPoints++;
+            //alert('Finora ti è andata bene!\nNumero di inserimenti da effettuare: ' + (mines-userPoints));
+        } 
+    } 
 
-    userNums[userPoints] = inputNum;
-    
-    if ( computerNums.includes(userNums[userPoints]) == true ) {
-        defeat = true;
-        alert('Hai perso clamorosamente e sei esploso/a! Per punizione ora devi formattare tutto senza fare backup. Sei comunque riuscito ad effettuare ' + userPoints + ' tentativi');
+    if(!defeat) {
+        alert('Hai vinto, sei più forte di un computer, vallo a dire a tutti i tuoi amici!\nPunteggio totalizzato ' + userPoints + ', ovvero il massimo consentito.');
     } else {
-        userPoints++;
-        alert('Finora ti è andata bene!\nNumero di inserimenti da effettuare: ' + (16-userPoints));
-    }    
-} 
-
-if(!defeat) {
-    alert('Hai vinto, sei più forte di un computer, vallo a dire a tutti i tuoi amici!\nPunteggio totalizzato ' + userPoints + ', ovvero il massimo consentito.');
-}
+        alert('Hai perso clamorosamente e sei esploso/a! Per punizione ora devi formattare tutto senza fare backup. Sei comunque riuscito ad effettuare ' + userPoints + ' tentativi');
+    }
+};
