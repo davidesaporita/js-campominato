@@ -45,11 +45,7 @@ function possibilities(level) {
 }
 
 function getRandomInt(min, max) {
-    var temp = 0;
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    temp = Math.floor(Math.random() * (max - min + 1)) + min;
-    console.log(temp);
+    var temp = Math.floor(Math.random() * (max - min + 1)) + min;
     return temp;
 }
 
