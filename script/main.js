@@ -15,3 +15,59 @@
  * 
  */
 
+var computerNums = [];
+var userNums = [];
+var difficultyIndex;
+var x = 100;
+var tempNum;
+
+while(isNaN(difficultyIndex) || (difficultyIndex < 0 && difficultyIndex > 3)) {
+    difficultyIndex = parseInt(prompt('Scegli il livello di difficoltà:\n 0 (Facile)\n 1 (Medio)\n 2 (Difficile)'));
+}
+
+switch ( difficultyIndex ) {
+    case 0: 
+        x = 100; 
+        break;
+    case 1: 
+        x = 80; 
+        break;
+    case 2: 
+        x = 50; 
+        break;
+    default: 
+        x = false;
+}
+
+for ( i = 0 ; i < 16; i++ ) {
+    do {
+        tempNum = Math.ceil( Math.random() * x );
+    } while( computerNums.includes(tempNum) === true );
+
+    computerNums[i] = tempNum;
+}
+
+console.table(computerNums);
+
+var userPoints = 0;
+var defeat = false;
+
+while( defeat === false && userPoints < 16 ) {
+    do {   
+        inputNum = parseInt(prompt('Tentativo n°' + (userPoints+1) + '\nInserisci un numero tra 1 e ' + x + ', vediamo se becchi la mina...' ));
+    } while ( isNaN(inputNum) || inputNum < 1 || inputNum > x );
+
+    userNums[userPoints] = inputNum;
+    
+    if ( computerNums.includes(userNums[userPoints]) == true ) {
+        defeat = true;
+        alert('Hai perso clamorosamente e sei esploso/a! Per punizione ora devi formattare tutto senza fare backup. Sei comunque riuscito ad effettuare ' + userPoints + ' tentativi');
+    } else {
+        userPoints++;
+        alert('Finora ti è andata bene!\nNumero di inserimenti da effettuare: ' + (16-userPoints));
+    }    
+} 
+
+if(!defeat) {
+    alert('Hai vinto, sei più forte di un computer, vallo a dire a tutti i tuoi amici!\nPunteggio totalizzato ' + userPoints + ', ovvero il massimo consentito.');
+}
