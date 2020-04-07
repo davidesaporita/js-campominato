@@ -1,0 +1,89 @@
+* {
+    box-sizing: border-box;
+    margin: 0; 
+    padding: 0;
+}
+
+body {
+
+}
+
+/* App */
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    text-align: center;
+}
+
+header {
+    background-color: #bbb;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    background-color: white;
+}
+
+footer {
+    background-color: #bbb;
+}
+
+ /* Main */
+
+#campo {
+     height: 250px;
+     width: 250px;
+     background: lightblue;
+     overflow: hidden;
+}
+
+.boxlist {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.boxBottom {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #888;
+    background-color: #d0d0d0;
+}
+
+.btn {
+    display: block;
+    width: 25px;
+    height: 25px;
+    background-color: #C2BFC2;
+}
+
+.mine {
+    background-image: url(../img/mine.png);
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.show {
+    opacity: 1;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+button .mine .red {
+    background: red url(../img/mine.png);
+}
+
+.ok {
+    background-image: url(../img/check.png);
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+}

@@ -12,14 +12,71 @@
  * con difficoltà 1 =>  tra 1 e 80
  * con difficoltà 2=> tra 1 e 50
  * 
- * 
  */
 
-var level = chooseLevel();
-var x = possibilities(level);
+//var level = chooseLevel();
+level = 0;                        // DEBUG
+var x = possibilities(level);       
 var mines = 16;
 var computerNumbers = playGenerator(mines, x);
 play(computerNumbers, x);
+
+function playGenerator(mines, x) {
+    var array = [];
+    var tempNum = 0;
+    for ( i = 0 ; i < mines; i++ ) {
+        while( tempNum <= 0 || array.includes(tempNum) === true ) {
+            tempNum = getRandomInt(1, x);
+        }
+        array.push(tempNum);
+    }
+
+    var campo = document.getElementById('boxlist');
+    for ( i = 1; i <= x; i++ ) {
+        if ( array.includes(i) == true ) {
+            content = '<li id="Box-' + i + '" class="boxBottom mine"><button id="Button-' + i + '" class="btn show"></button></li>';
+        } else {
+            content = '<li id="Box-' + i + '" class="boxBottom ok"><button id="Button-' + i + '" class="btn show"></button></li>';
+        }
+        campo.innerHTML += content;
+    }
+    return array;
+}
+
+function play(computerNumbers, x) {
+    var userPoints = 0;
+    var userNumbers = [];
+    var defeat = false;
+    var inputNum = 0;
+
+    for ( i = 1 ; i <= x ; i++ ) {
+        box = document.getElementById('Box-' + i);
+        button = document.getElementById('Button-' + i);
+        button.addEventListener('click', checkMine);
+        userNumbers[i] = i;
+        userPoints++;
+    }
+}
+
+function checkMine() {
+    var id = parseInt(this.id.slice(7)); 
+    if ( computerNumbers.includes(id) ) {
+        this.classList.add('mine','red');
+        for ( var i = 0 ; i < computerNumbers.length ; i++ ) {
+            document.getElementById('Button-' + computerNumbers[i]).classList.add('mine');
+        }
+        for ( var i = 1 ; i <= x; i++ ) {
+            if ( computerNumbers.includes(i) == false ) {
+                // document.getElementById('Button-' + (i)).classList.remove('show');
+                // document.getElementById('Button-' + (i)).classList.add('hidden');
+            }
+        }
+        
+    } else {
+        this.classList.remove('show');
+        this.classList.add('hidden');
+    }
+}
 
 function chooseLevel() {
     var level;
@@ -48,43 +105,3 @@ function getRandomInt(min, max) {
     var temp = Math.floor(Math.random() * (max - min + 1)) + min;
     return temp;
 }
-
-function playGenerator(mines, x) {
-    var array = [];
-    var tempNum = 0;
-    for ( i = 0 ; i < mines; i++ ) {
-        while( tempNum <= 0 || array.includes(tempNum) === true ) {
-            tempNum = getRandomInt(1, x);
-        }
-        array.push(tempNum);
-    }
-    console.table(array);
-    return array;
-}
-
-function play(computerNumbers, x) {
-    var userPoints = 0;
-    var userNumbers = [];
-    var defeat = false;
-    var inputNum = 0;
-
-    while( defeat === false && userPoints < mines ) {
-        while ((userNumbers.includes(inputNum) === true) || (isNaN(inputNum) || inputNum < 1 || inputNum > x)) {   
-            inputNum = parseInt(prompt('Tentativo n°' + (userPoints+1) + '\nInserisci un numero tra 1 e ' + x + ', vediamo se becchi la mina...' ));
-        } 
-        userNumbers[userPoints] = inputNum;
-        
-        if ( computerNumbers.includes(userNumbers[userPoints]) === true ) {
-            defeat = true;
-        } else {
-            userPoints++;
-            //alert('Finora ti è andata bene!\nNumero di inserimenti da effettuare: ' + (mines-userPoints));
-        } 
-    } 
-
-    if(!defeat) {
-        alert('Hai vinto, sei più forte di un computer, vallo a dire a tutti i tuoi amici!\nPunteggio totalizzato ' + userPoints + ', ovvero il massimo consentito.');
-    } else {
-        alert('Hai perso clamorosamente e sei esploso/a! Per punizione ora devi formattare tutto senza fare backup. Sei comunque riuscito ad effettuare ' + userPoints + ' tentativi');
-    }
-};
